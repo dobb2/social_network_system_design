@@ -41,6 +41,7 @@ and subscribing to other travelers.
 *  2000 characters limit for post
 *  5 image limit for post
 *  maximum image size 5 Mb
+*  the user chooses the location for the post from a list of suggested locations
 
 
 ## Load estimation
