@@ -14,15 +14,16 @@ and subscribing to other travelers.
 * browsing popular locations
 * view posts from a specified location
 * view traveler feed
+* the user chooses the location for the post from a map
 
 
 ### Non-functional requirements:
 
 *  linear growth during the year to 10 000 000 DAU
-*  on average, 15 percent of users publish 2 posts per day
-*  on average, 30 percent of users rate 5 posts per day
-*  on average, 5 percent of users comment 3 posts per day
-*  users view an average of 15 posts per day
+*  only 15 percent of users make posts, each averaging 2 posts each
+*  only 30 percent of users rate posts, each averaging 5 posts per day
+*  only 5 percent of users comment posts, each averaging 3 posts per day
+*  all users view an average of 15 posts per day
 *  availability 99,99%
 *  CIS region of use
 *  always keep the data (posts, comments, rates)
@@ -31,17 +32,16 @@ and subscribing to other travelers.
 *  maximum number of comments per day 30
 *  average number of comments per post 10
 *  mobile and web versions
-*  the list of popular places may not be updated immediately
-*  comments post should reach in 5 seconds
-*  post evaluations should come as soon as possible
-*  in summer and on big calendar weekends, a 50 percent increase in user activity 
-*  subscription feed in chronological order
-*  the subscription feed should be updated as quickly as possible
-*  popular places by location are updated once a day (based on estimates)
-*  2000 characters limit for post
-*  5 image limit for post
-*  maximum image size 5 Mb
-*  the user chooses the location for the post from a list of suggested locations
+*  the list of popular places should be updated once a day (based on rates)
+*  comments post should reach in 3 seconds
+*  post evaluations should be delivered in 3 seconds
+*  in summer and on big calendar weekends, a 30 percent increase in user activity
+(create posts, comments, rates and reading content) 
+*  subscription feed in reverse chronological order
+*  the subscription feed should be updated in 5 seconds
+*  1000 characters limit for post
+*  3 image limit for post
+*  maximum image size 1 Mb
 
 
 ## Load estimation
@@ -66,23 +66,24 @@ Size:
 
     post_id - 8 bytes
     author_id - 8 bytes
-    location_id - 8 byte
+    point_location - 16 bytes
+    location_name - 50 * 2 ~= 100 bytes
     timestamp - 8 bytes
-    description - 2000 * 2 ~= 4000 bytes
-    media - 5 * 5 ~= 25 Mb
+    description - 1000 * 2 ~= 2000 bytes
+    media - 1 * 3 ~= 3 Mb
     total_rate - 1 byte
-    Total ~= 26 Mb
+    Total ~= 3.1 Mb
 
 Traffic:
 
-    (write) 26 Mb * 35 = 910 Mb/s
-    (read) 26 Mb * 1740 = 45 Gb/s
+    (write) 3.1 Mb * 35 ~= 108.5 Mb/s
+    (read) 3.1 Mb * 1740 ~= 5,3 Gb/s
 
 Required memory:
 
     Created posts for 1 year = 10 000 000 * 15% * 2 * 365 = 3 000 000 * 365 post/year
-    Each post size ~= 26Mb
-    Required memory for 1 year = 3 000 000 * 26 Mb * 365 ~= 78 * 365 Tb ~= 27.8 Pb
+    Each post size ~= 3.1Mb
+    Required memory for 1 year = 3 000 000 * 3.1 Mb * 365 ~= 78 * 365 Tb ~= 3.2 Pb
 
 ### subsystem Comment
 
