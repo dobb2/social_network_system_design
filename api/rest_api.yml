@@ -42,9 +42,9 @@ paths:
                 point_location:
                   type: object
                   properties:
-                    x:
+                    latitude:
                       type: number
-                    y:
+                    longitude:
                       type: number
                 description:
                   type: string
@@ -66,8 +66,8 @@ paths:
                   description: "Good place in Rostov"
                   location_name: "Roston-on-Don"
                   point_location:
-                    x: 47.2248606
-                    y: 39.7022858
+                    latitude: 47.2248606
+                    longitude: 39.7022858
                   media: ["https://www.mediafornetwork.com/rostovondon-region-3", "https://www.mediafornetwork.com/rostovondon-region-2", "https://www.mediafornetwork.com/rostovondon-region-1"]
       responses:
         201:
@@ -95,9 +95,9 @@ paths:
                   point_location:
                     type: object
                     properties:
-                      x:
+                      latitude:
                         type: number
-                      y:
+                      longitude:
                         type: number
                   description:
                     type: string
@@ -118,8 +118,8 @@ paths:
                     description: "Good place in Rostov"
                     location_name: "Roston-on-Don"
                     point_location:
-                      x: 47.2248606
-                      y: 39.7022858
+                      latitude: 47.2248606
+                      longitude: 39.7022858
                     media: ["https://www.mediafornetwork.com/rostovondon-region-3", "https://www.mediafornetwork.com/rostovondon-region-2", "https://www.mediafornetwork.com/rostovondon-region-1"]
         400:
           description: Bad Request
@@ -168,9 +168,9 @@ paths:
                         point_location:
                           type: object
                           properties:
-                            x:
+                            latitude:
                               type: number
-                            y:
+                            longitude:
                               type: number
                         description:
                           type: string
@@ -215,7 +215,7 @@ paths:
     get:
       tags:
         - post
-      summary: Get posts by id
+      summary: Get post by id
       description: get post author by id
       parameters:
         - name: id
@@ -244,9 +244,9 @@ paths:
                   point_location:
                     type: object
                     properties:
-                      x:
+                      latitude:
                         type: number
-                      y:
+                      longitude:
                         type: number
                   description:
                     type: string
@@ -292,9 +292,9 @@ paths:
                 point_location:
                   type: object
                   properties:
-                    x:
+                    latitude:
                       type: number
-                    y:
+                    longitude:
                       type: number
                 description:
                   type: string
@@ -312,8 +312,8 @@ paths:
                   description: "Good place in Rostov"
                   location_name: "Roston-on-Don"
                   point_location:
-                    x: 47.2248606
-                    y: 39.7022858
+                    latitude: 47.2248606
+                    longitude: 39.7022858
                   media: ["https://www.mediafornetwork.com/rostovondon-region-3", "https://www.mediafornetwork.com/rostovondon-region-2", "https://www.mediafornetwork.com/rostovondon-region-1"]
       responses:
         200:
@@ -338,9 +338,9 @@ paths:
                   point_location:
                     type: object
                     properties:
-                      x:
+                      latitude:
                         type: number
-                      y:
+                      longitude:
                         type: number
                   description:
                     type: string
@@ -360,8 +360,8 @@ paths:
                     description: "Good place in Rostov"
                     location_name: "Roston-on-Don"
                     point_location:
-                      x: 47.2248606
-                      y: 39.7022858
+                      latitude: 47.2248606
+                      longitude: 39.7022858
                     media: ["https://www.mediafornetwork.com/rostovondon-region-3", "https://www.mediafornetwork.com/rostovondon-region-2", "https://www.mediafornetwork.com/rostovondon-region-1"]
         400:
           description: Bad Request
@@ -756,9 +756,9 @@ paths:
                         point_location:
                           type: object
                           properties:
-                            x:
+                            latitude:
                               type: number
-                            y:
+                            longitude:
                               type: number
                         description:
                           type: string
@@ -816,9 +816,9 @@ paths:
                         point_location:
                           type: object
                           properties:
-                            x:
+                            latitude:
                               type: number
-                            y:
+                            longitude:
                               type: number
                         description:
                           type: string
@@ -884,9 +884,9 @@ paths:
                         point_location:
                           type: object
                           properties:
-                            x:
+                            latitude:
                               type: number
-                            y:
+                            longitude:
                               type: number
                         description:
                           type: string
@@ -908,52 +908,8 @@ paths:
           description: Not found location
         500:
           description: Server error
-  /authors/{id}/subscribe:
-    put:
-      tags:
-        - author
-      summary: subscribe to a author by author id
-      description: subscribe to a author by author id
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: author id
-          schema:
-            type : string
-      responses:
-        200:
-          description: Ok
-        400:
-          description: Bad Request
-        404:
-          description: Not found author
-        500:
-          description: Server error
-  /authors/{id}/unsubscribe:
-    put:
-      tags:
-        - author
-      summary: unsubscribe to a author by author id
-      description: unsubscribe to a author by author id
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: author id
-          schema:
-            type : string
-      responses:
-        200:
-          description: Ok
-        400:
-          description: Bad Request
-        404:
-          description: Not found author
-        500:
-          description: Server error
   /authors/{id}/posts:
-    put:
+    get:
       tags:
         - author
       summary: get all posts author by author id
@@ -999,9 +955,9 @@ paths:
                         point_location:
                           type: object
                           properties:
-                            x:
+                            latitude:
                               type: number
-                            y:
+                            longitude:
                               type: number
                         description:
                           type: string
@@ -1055,17 +1011,64 @@ paths:
               schema:
                 type: object
                 properties:
-                  data:
+                  follower_ids:
                     items:
-                      type: object
+                      type: string
                       properties:
-                        author_id:
-                          type: string
-                          description: author id
+                        type: string
+                        description: author id
                   totalCount:
                     type: integer
                   totalPages:
                     type: integer
+        400:
+          description: Bad Request
+        404:
+          description: Not found author
+        500:
+          description: Server error
+    put:
+      tags:
+        - author
+      summary: update subscriptions to a author by author id
+      description: unsubscribe to a author by author id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: author id
+          schema:
+            type : string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                follower_ids:
+                  items:
+                    type: string
+                    properties:
+                      author_id:
+                        type: string
+                        description: author id
+              required:
+                - updated_at
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  follower_ids:
+                    items:
+                      type: string
+                      properties:
+                        type: string
+                        description: follower id
         400:
           description: Bad Request
         404:
