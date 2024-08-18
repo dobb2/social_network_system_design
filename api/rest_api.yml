@@ -1,0 +1,1084 @@
+openapi: 3.0.3
+info:
+  title: Swagger Social network for travelers API
+  description: Current API describes interaction with Social network
+  version: 1.0.0
+servers:
+  - url: https://goodtravelersocialnet.swagger.io/api/v1
+tags:
+  - name: post
+    description: Operations about post
+  - name: comment
+    description: Operations about comment
+  - name: author
+    description: Operations about author
+  - name: feed
+    description: Operations about feed
+  - name: location
+    description: Operations about location
+paths:
+  /posts:
+    post:
+      tags:
+        - post
+      summary: Create post
+      description: publishing post from travels with photos, a small description and a link to a specific travel destination
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                author_id:
+                  type: string
+                  description: author id
+                created_at:
+                  type: string
+                  description: created at
+                location_name:
+                  type: string
+                  description: location name
+                point_location:
+                  type: object
+                  properties:
+                    latitude:
+                      type: number
+                    longitude:
+                      type: number
+                description:
+                  type: string
+                  description: post description
+                media:
+                  items:
+                    type: string
+                  type: array
+              required:
+                - author_id
+                - created_at
+                - location_name
+                - point_location
+            examples:
+              request:
+                value:
+                  author_id: "cdc11"
+                  created_at: "2024-08-12T13:52:05Z"
+                  description: "Good place in Rostov"
+                  location_name: "Roston-on-Don"
+                  point_location:
+                    latitude: 47.2248606
+                    longitude: 39.7022858
+                  media: ["https://www.mediafornetwork.com/rostovondon-region-3", "https://www.mediafornetwork.com/rostovondon-region-2", "https://www.mediafornetwork.com/rostovondon-region-1"]
+      responses:
+        201:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: post id
+                  author_id:
+                    type: string
+                    description: author id
+                  created_at:
+                    type: string
+                    description: created at
+                  updated_at:
+                    type: string
+                    description: updated at
+                  location_name:
+                    type: string
+                    description: location name
+                  point_location:
+                    type: object
+                    properties:
+                      latitude:
+                        type: number
+                      longitude:
+                        type: number
+                  description:
+                    type: string
+                    description: post description
+                  media:
+                    items:
+                      type: string
+                    type: array
+                  total_rate:
+                    type: number
+                    description: average rate
+              example:
+                response:
+                  value:
+                    id: "fh1"
+                    author_id: "cdc11"
+                    created_at: "2024-08-12T13:52:05Z"
+                    description: "Good place in Rostov"
+                    location_name: "Roston-on-Don"
+                    point_location:
+                      latitude: 47.2248606
+                      longitude: 39.7022858
+                    media: ["https://www.mediafornetwork.com/rostovondon-region-3", "https://www.mediafornetwork.com/rostovondon-region-2", "https://www.mediafornetwork.com/rostovondon-region-1"]
+        400:
+          description: Bad Request
+        500:
+          description: Server error
+    get:
+      tags:
+        - post
+      summary: Get all posts
+      description: retrieve all posts created by the author
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set.
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          description: The numbers of items to return.
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: post id
+                        author_id:
+                          type: string
+                          description: author id
+                        created_at:
+                          type: string
+                          description: created at
+                        location_name:
+                          type: string
+                          description: location name
+                        point_location:
+                          type: object
+                          properties:
+                            latitude:
+                              type: number
+                            longitude:
+                              type: number
+                        description:
+                          type: string
+                          description: post description
+                        media:
+                          items:
+                            type: string
+                          type: array
+                        total_rate:
+                          type: number
+                          description: average rate
+                  totalCount:
+                    type: integer
+                  totalPages:
+                    type: integer
+        400:
+          description: Bad Request
+        500:
+          description: Server error
+  /posts/{id}:
+    delete:
+      tags:
+        - post
+      summary: delete post by post id
+      description: delete post by post id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: post id
+          schema:
+            type : string
+      responses:
+        200:
+          description: Successful post removal
+        400:
+          description: Bad Request
+        404:
+          description: Post Not Found
+        500:
+          description: Server error
+    get:
+      tags:
+        - post
+      summary: Get post by id
+      description: get post author by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: post id
+          schema:
+            type : string
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  author_id:
+                    type: string
+                    description: author id
+                  created_at:
+                    type: string
+                    description: created at
+                  location_name:
+                    type: string
+                    description: location name
+                  point_location:
+                    type: object
+                    properties:
+                      latitude:
+                        type: number
+                      longitude:
+                        type: number
+                  description:
+                    type: string
+                    description: post description
+                  media:
+                    items:
+                      type: string
+                    type: array
+                  total_rate:
+                    type: number
+                    description: average rate
+        400:
+          description: Bad Request
+        404:
+          description: Not found
+        500:
+          description: Server error
+    put:
+      tags:
+        - post
+      summary: Update post by id
+      description: update post by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: post id
+          schema:
+            type : string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                updated_at:
+                  type: string
+                  description: updated at
+                location_name:
+                  type: string
+                  description: location name
+                point_location:
+                  type: object
+                  properties:
+                    latitude:
+                      type: number
+                    longitude:
+                      type: number
+                description:
+                  type: string
+                  description: post description
+                media:
+                  items:
+                    type: string
+                  type: array
+              required:
+                - updated_at
+            examples:
+              request:
+                value:
+                  updated_at: "2024-08-12T13:52:05Z"
+                  description: "Good place in Rostov"
+                  location_name: "Roston-on-Don"
+                  point_location:
+                    latitude: 47.2248606
+                    longitude: 39.7022858
+                  media: ["https://www.mediafornetwork.com/rostovondon-region-3", "https://www.mediafornetwork.com/rostovondon-region-2", "https://www.mediafornetwork.com/rostovondon-region-1"]
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: post id
+                  author_id:
+                    type: string
+                    description: author id
+                  created_at:
+                    type: string
+                    description: created at
+                  location_name:
+                    type: string
+                    description: location name
+                  point_location:
+                    type: object
+                    properties:
+                      latitude:
+                        type: number
+                      longitude:
+                        type: number
+                  description:
+                    type: string
+                    description: post description
+                  media:
+                    items:
+                      type: string
+                    type: array
+                  total_rate:
+                    type: number
+                    description: average rate
+              example:
+                response:
+                  value:
+                    author_id: "cdc11"
+                    updated_at: "2024-08-12T13:58:05Z"
+                    description: "Good place in Rostov"
+                    location_name: "Roston-on-Don"
+                    point_location:
+                      latitude: 47.2248606
+                      longitude: 39.7022858
+                    media: ["https://www.mediafornetwork.com/rostovondon-region-3", "https://www.mediafornetwork.com/rostovondon-region-2", "https://www.mediafornetwork.com/rostovondon-region-1"]
+        400:
+          description: Bad Request
+        500:
+          description: Server error
+  /posts/{id}/rates:
+    put:
+      tags:
+        - post
+      summary: Add rate for post with post id
+      description: Add rate for post using post id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: post id
+          schema:
+            type : string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                author_id:
+                  type: string
+                  description: author of rate id
+                rate:
+                  type: integer
+                  description: rate
+              required:
+                - author_id
+                - rate
+            examples:
+              request:
+                value:
+                  author_id: "cdc13vfv"
+                  rate: 10
+      responses:
+        201:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  author_id:
+                    type: string
+                    description: author of rate id
+                  rate:
+                    type: integer
+                    description: rate
+              example:
+                author_id: "cdc13vfv"
+                rate: 7
+        400:
+          description: Bad Request
+        500:
+          description: Server error
+    get:
+      tags:
+        - post
+      summary: Get all rates for post with post id
+      description: Get all rates for post using post id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: post id
+          schema:
+            type : string
+        - name: offset
+          in: query
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set.
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          description: The numbers of items to return.
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    items:
+                      type: object
+                      properties:
+                        author_id:
+                          type: string
+                          description: author id
+                        rate:
+                          type: integer
+                          description: rate
+                  totalCount:
+                    type: integer
+                  totalPages:
+                    type: integer
+        400:
+          description: Bad Request
+        404:
+          description: Post Not Found
+        500:
+          description: Server error
+  /posts/{id}/comments:
+    post:
+      tags:
+        - post
+      summary: Create comment for post with post id
+      description: Create comment for post using post id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: post id
+          schema:
+            type : string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                author_id:
+                  type: string
+                  description: author id
+                created_at:
+                  type: string
+                  description: created at
+                comment:
+                  type: string
+                  description: comment
+              required:
+                - author_id
+                - created_at
+                - comment
+            examples:
+              request:
+                value:
+                  author_id: "cdc13"
+                  created_at: "2024-08-12T13:59:05Z"
+                  comment: "very nice post about Rostov"
+      responses:
+        201:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: post id
+                  author_id:
+                    type: string
+                    description: author id
+                  created_at:
+                    type: string
+                    description: created at
+                  comment:
+                    type: string
+                    description: comment
+              example:
+                id: "fh1"
+                author_id: "cdc13"
+                created_at: "2024-08-12T13:59:05Z"
+                comment: "very nice post about Rostov"
+        400:
+          description: Bad Request
+        500:
+          description: Server error
+    get:
+      tags:
+        - post
+      summary: Get comments for post with post id
+      description: Get all comments for post using post id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: post id
+          schema:
+            type : string
+        - name: offset
+          in: query
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set.
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          description: The numbers of items to return.
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    items:
+                      type: object
+                      properties:
+                        comment_id:
+                          type: string
+                          description: post id
+                        author_id:
+                          type: string
+                          description: author id
+                        created_at:
+                          type: string
+                          description: created at
+                        comment:
+                          type: string
+                          description: comment
+                  totalCount:
+                    type: integer
+                  totalPages:
+                    type: integer
+        400:
+          description: Bad Request
+        404:
+          description: Post Not Found
+        500:
+          description: Server error
+  /comments/{id}:
+    get:
+      tags:
+        - comment
+      summary: get comment by comment id
+      description: get comment by comment id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: post id
+          schema:
+            type : string
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  post_id:
+                    type: string
+                    description: post id
+                  author_id:
+                    type: string
+                    description: author id
+                  comment:
+                    type: string
+                    description: comment
+                  created_at:
+                    type: string
+                    description: created_at
+              example:
+                post_id: "fh1"
+                author_id: "cdc13"
+                created_at: "2024-08-12T13:59:05Z"
+                comment: "very nice post about Rostov"
+        404:
+          description: Comment Not Found
+        500:
+          description: Server error
+    put:
+      tags:
+        - comment
+      summary: Update comment by comment id
+      description: Update comment by comment id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: comment id
+          schema:
+            type : string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  type: string
+              required:
+                - comment
+            examples:
+              request:
+                value:
+                  comment: "wow"
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  post_id:
+                    type: string
+                    description: post id
+                  author_id:
+                    type: string
+                    description: author id
+                  created_at:
+                    type: string
+                    description: created at
+                  comment:
+                    type: string
+                    description: comment
+        400:
+          description: Bad Request
+        404:
+          description: Post Not Found
+        500:
+          description: Server error
+    delete:
+      tags:
+        - comment
+      summary: delete comment by comment id
+      description: delete comment by comment id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: post id
+          schema:
+            type : string
+      responses:
+        200:
+          description: Successful comment removal
+        400:
+          description: Bad Request
+        404:
+          description: Comment Not Found
+        500:
+          description: Server error
+  /feed:
+    get:
+      tags:
+        - feed
+      summary: get posts from subscribed users
+      description: view subscription posts
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set.
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          description: The numbers of items to return.
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    items:
+                      type: object
+                      properties:
+                        post_id:
+                          type: string
+                          description: post id
+                        author_id:
+                          type: string
+                          description: author id
+                        created_at:
+                          type: string
+                          description: created at
+                        location_name:
+                          type: string
+                          description: location name
+                        point_location:
+                          type: object
+                          properties:
+                            latitude:
+                              type: number
+                            longitude:
+                              type: number
+                        description:
+                          type: string
+                          description: post description
+                        media:
+                          items:
+                            type: string
+                          type: array
+                        total_rate:
+                          type: number
+                          description: average rate
+                  totalCount:
+                    type: integer
+                  totalPages:
+                    type: integer
+        404:
+          description: Comment Not Found
+        500:
+          description: Server error
+  /locations:
+    get:
+      tags:
+        - location
+      summary: get popular locations
+      description: get popular locations
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set.
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          description: The numbers of items to return.
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    items:
+                      type: object
+                      properties:
+                        location_id:
+                          type: string
+                          description: location id
+                        location_name:
+                          type: string
+                          description: location name
+                        point_location:
+                          type: object
+                          properties:
+                            latitude:
+                              type: number
+                            longitude:
+                              type: number
+                        description:
+                          type: string
+                          description: location description
+                        total_rate:
+                          type: number
+                          description: average rate
+                  totalCount:
+                    type: integer
+                  totalPages:
+                    type: integer
+        400:
+          description: Bad Request
+        500:
+          description: Server error
+  /locations/{id}/posts:
+    get:
+      tags:
+        - location
+      summary: get posts from location with location id
+      description: get posts from location with location id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: location id
+          schema:
+            type : string
+        - name: offset
+          in: query
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set.
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          description: The numbers of items to return.
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    items:
+                      type: object
+                      properties:
+                        post_id:
+                          type: string
+                          description: post id
+                        author_id:
+                          type: string
+                          description: author id
+                        created_at:
+                          type: string
+                          description: created at
+                        location_name:
+                          type: string
+                          description: location name
+                        point_location:
+                          type: object
+                          properties:
+                            latitude:
+                              type: number
+                            longitude:
+                              type: number
+                        description:
+                          type: string
+                          description: post description
+                        media:
+                          items:
+                            type: string
+                          type: array
+                        total_rate:
+                          type: number
+                          description: average rate
+                  totalCount:
+                    type: integer
+                  totalPages:
+                    type: integer
+        400:
+          description: Bad Request
+        404:
+          description: Not found location
+        500:
+          description: Server error
+  /authors/{id}/posts:
+    get:
+      tags:
+        - author
+      summary: get all posts author by author id
+      description: get all posts author by author id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: author id
+          schema:
+            type : string
+        - name: offset
+          in: query
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set.
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          description: The numbers of items to return.
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    items:
+                      type: object
+                      properties:
+                        post_id:
+                          type: string
+                          description: post id
+                        created_at:
+                          type: string
+                          description: created at
+                        location_name:
+                          type: string
+                          description: location name
+                        point_location:
+                          type: object
+                          properties:
+                            latitude:
+                              type: number
+                            longitude:
+                              type: number
+                        description:
+                          type: string
+                          description: post description
+                        media:
+                          items:
+                            type: string
+                          type: array
+                        total_rate:
+                          type: number
+                          description: average rate
+                  totalCount:
+                    type: integer
+                  totalPages:
+                    type: integer
+        400:
+          description: Bad Request
+        404:
+          description: Not found author
+        500:
+          description: Server error
+
+  /authors/{id}/subscriptions:
+    get:
+      tags:
+        - author
+      summary: get all subscriptions author by author id
+      description: get all subscriptions author by author id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: author id
+          schema:
+            type : string
+        - name: offset
+          in: query
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set.
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          description: The numbers of items to return.
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  follower_ids:
+                    items:
+                      type: string
+                      properties:
+                        type: string
+                        description: author id
+                  totalCount:
+                    type: integer
+                  totalPages:
+                    type: integer
+        400:
+          description: Bad Request
+        404:
+          description: Not found author
+        500:
+          description: Server error
+    put:
+      tags:
+        - author
+      summary: update subscriptions to a author by author id
+      description: unsubscribe to a author by author id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: author id
+          schema:
+            type : string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                follower_ids:
+                  items:
+                    type: string
+                    properties:
+                      author_id:
+                        type: string
+                        description: author id
+              required:
+                - updated_at
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  follower_ids:
+                    items:
+                      type: string
+                      properties:
+                        type: string
+                        description: follower id
+        400:
+          description: Bad Request
+        404:
+          description: Not found author
+        500:
+          description: Server error
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: User-API-Key
