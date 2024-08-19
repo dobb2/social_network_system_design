@@ -16,6 +16,8 @@ tags:
     description: Operations about feed
   - name: location
     description: Operations about location
+  - name: subscription
+    description: Operations about subscription
 paths:
   /posts:
     post:
@@ -368,7 +370,7 @@ paths:
         500:
           description: Server error
   /posts/{id}/rates:
-    put:
+    post:
       tags:
         - post
       summary: Add rate for post with post id
@@ -1025,10 +1027,32 @@ paths:
           description: Not found author
         500:
           description: Server error
-    put:
+  /subscriptions/{id}:
+    post:
       tags:
-        - author
-      summary: update subscriptions to a author by author id
+        - subscription
+      summary: subscribe to author id
+      description: subscribe to a author by author id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: author id
+          schema:
+            type : string
+      responses:
+        200:
+          description: Successful subscription to author
+        400:
+          description: Bad Request
+        404:
+          description: Not found author
+        500:
+          description: Server error
+    delete:
+      tags:
+        - subscription
+      summary: unsubscribe from author id
       description: unsubscribe to a author by author id
       parameters:
         - name: id
@@ -1037,31 +1061,9 @@ paths:
           description: author id
           schema:
             type : string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                follower_ids:
-                  items:
-                    type: string
-                  type: array
-              required:
-                - updated_at
       responses:
         200:
-          description: Ok
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  follower_ids:
-                    items:
-                      type: string
-                    type: array
+          description: Successful subscription removal
         400:
           description: Bad Request
         404:
