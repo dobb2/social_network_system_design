@@ -1,14 +1,23 @@
+// when adding new ratings recalculate, when giving out posts, give their average rating from the cache
 Table average_rates {
   post_id string [not null, note: 'post id']
   avg_rate int [note: 'average rate of post']
   count int [note: 'count rate of post']
 }
 
+// for 10,000,000 users from the DAU store a feed of 20 posts
 Table feed_posts {
     user_id string [primary key]
     posts post[20]
 }
 
+// store up to 10 last posts of each user from DAU
+Table user_posts {
+    user_id string [primary key]
+    posts post[20]
+}
+
+// the structure of posts that we store in feed posts in cache
 Table post {
   id string [primary key]
   author_id string [not null, note: 'author id of the post']
@@ -21,6 +30,7 @@ Table post {
   comments comment[10]
 }
 
+// the structure of comments that we store in posts for feed
 Table comment {
   id string [primary key]
   post_id string [not null, note: '']
