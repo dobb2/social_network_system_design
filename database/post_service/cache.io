@@ -11,7 +11,7 @@ Table feed_posts {
     posts post[20]
 }
 
-// store up to 10 last posts of each user from DAU
+// store up to 20 last posts of each user from DAU
 Table user_posts {
     user_id string [primary key]
     posts post[20]

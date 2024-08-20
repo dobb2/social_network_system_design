@@ -1,10 +1,10 @@
 Table location_posts {
   location_latitude_longitude string [primary key, note: 'key coordinates for cache']
-  location_posts post[10]
+  location_posts post[20]
 }
 
 Table popular_location {
-  location_latitude_longitude string
+    location_latitude_longitude string
     avg_rate int [note: 'average score of posts with the specified location']
 }
 

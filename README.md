@@ -176,6 +176,11 @@ Disk evaluation for comment in db:
 
     Use 3 * SSD (Sata) 4TB
 
+Required memory for posts with comments in cache:
+
+    feed for DAU = 10 000 000 * 20 * (3.7 Kb + (1040 bytes * 10))~= 2.6 Tb
+    last 20 posts from DAU = 10 000 000 * 20 * (3.7 Kb + (1040 bytes * 10)) ~= 2.6 Tb
+
 ### subsystem Rate
 
 RPS (write):
@@ -217,6 +222,15 @@ Disk evaluation for rate in db:
     Disks(HDD) = max(ceil(0.6796875), ceil(1.171875e-05), ceil(0.175)) = 1
 
     Use 1 * SSD (Sata) 256 Gb
+
+Required memory for aggregated rate for posts in cache:
+
+    post_id 16 bytes
+    avg_rate int 8 bytes
+    count int 8 bytes
+    total 32 bytes
+
+    Memory for all posts for 1 year = 32 bytes * 3 000 000 * 365 post/year ~= 33 Gb
 
 ### subsystem User
 
@@ -262,6 +276,33 @@ Disk evaluation for user:
 
 ### subsystem Location
 
+Memory for 1000 popular locations in cache:
+    
+    location - 16 bytes
+    avg_rate - 8 byte
 
+    1000 * 24 bytes = 23.4375 Kb
+
+Memory for 1000 popular locations with 20 posts in cache:
+
+    location - 16 bytes
+    post - 3.7 Kb
+    total ~= 3.8 Kb
+
+    1000 * 20 * 3.8 Kb ~= 75 Mb
+
+
+Memory for daily rates in cache:
+
+    date 8 bytes
+    post_id 16 bytes
+    location_latitude 8 bytes
+    location_longitude 8 bytes
+    rate 8 bytes
+
+    total ~= 48 bytes
+
+    Daily rates = 10 000 000 * 30% * 5 = 15000000
+    Daily Memory = 15000000 * 48 = 686.64 Mb
 
     
