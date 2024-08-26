@@ -1,3 +1,5 @@
+
+// store the last 20 posts from this location in reverse chronological order
 Table location_posts {
   location_latitude_longitude string [primary key, note: 'key coordinates for cache']
   location_posts post[20]
