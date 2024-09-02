@@ -1,5 +1,12 @@
 // relational db (postgres)
 
+// Replication:
+// - master-slave (async) and Warm Standby
+// - replication factor 2
+//
+// Sharding:
+// - No need for 1 year estimation loads, but virtual sharding for follows by following_user_id
+
 Table users {
   id string [primary key]
   username varchar(100) [not null]

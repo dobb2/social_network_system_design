@@ -1,3 +1,11 @@
+// Replication:
+// - master-slave (sync) and Warm Standby
+// - replication factor 2
+//
+// Sharding:
+// - No need for 1 year estimation loads, but virtual sharding split by post_id
+
+
 Table rates {
   id string [primary key]
   post_id string [not null, note: 'post id rated']

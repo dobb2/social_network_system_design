@@ -1,3 +1,11 @@
+// Replication:
+// - master-slave (sync)
+// - replication factor 2
+// sync, because have 35 rps to write
+// Sharding:
+// - key based by id and author_id
+
+
 Table posts {
   id string [primary key]
   author_id string [not null, note: 'author id of the post']
@@ -9,14 +17,3 @@ Table posts {
   media "varchar(255)[3]" [note: 'image urls']
 }
 
-
-Table comments {
-  id string [primary key]
-  post_id string [not null, note: '']
-  author_id string [not null, note: 'author id of the comment']
-  comment varchar(500) [not null]
-  created_at timestamp [not null]
-}
-
-
-Ref : comments.post_id > posts.id
