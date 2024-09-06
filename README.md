@@ -126,6 +126,23 @@ Disk evaluation for media in db:
 
     Use 32 * SSD (Sata) 100TB
 
+Host evaluation for post:
+
+    Hosts = 2 / 2 = 1
+    Hosts_with_replication_2 = 2 * 1 = 2
+
+* Since traffic and rps are not large for post service, it makes sense to put the entire master base in one host.
+  An excessive number of hosts will make it harder for us to interact with them,
+  and there is no need for load balancing yet
+
+Host evaluation for media:
+
+    Hosts = 32 / 4 = 8
+    Hosts_with_replication_2 = 8 * 3 = 24
+
+* Given that the bandwidth is about 1gb/s, we need 5.5gb of traffic from 6 hosts. 
+* Given 32 memory disks, we need a minimum of 8 hosts, then there will be 4 disks per host
+
 ### subsystem Comment
 
 RPS (write):
@@ -176,6 +193,16 @@ Disk evaluation for comment in db:
 
     Use 3 * SSD (Sata) 4TB
 
+Host evaluation for comment:
+
+    Hosts = 3 / 3 = 1
+    Hosts_with_replication_2 = 1 * 2 = 2
+
+* Since traffic and rps are not large, it makes sense to put the entire master base in one host.
+    An excessive number of hosts will make it harder for us to interact with them, 
+    and there is no need for load balancing yet
+    
+
 Required memory for posts with comments in cache:
 
     feed for DAU = 10 000 000 * 20 * (3.7 Kb + (1040 bytes * 10))~= 2.6 Tb
@@ -222,6 +249,11 @@ Disk evaluation for rate in db:
     Disks(HDD) = max(ceil(0.6796875), ceil(1.171875e-05), ceil(0.175)) = 1
 
     Use 1 * SSD (Sata) 256 Gb
+
+Host evaluation for rate:
+
+    Hosts = 1 / 1 = 1
+    Hosts_with_replication_2 = 1 * 2 = 2
 
 Required memory for aggregated rate for posts in cache:
 
@@ -274,6 +306,11 @@ Disk evaluation for user:
     
     Use 1 * SSD (Sata) 256 Gb
 
+Host evaluation for user:
+
+    Hosts = 1 / 1 = 1
+    Hosts_with_replication_2 = 1 * 2 = 2
+
 ### subsystem Location
 
 Memory for 1000 popular locations in cache:
@@ -304,5 +341,4 @@ Memory for daily rates in cache:
 
     Daily rates = 10 000 000 * 30% * 5 = 15000000
     Daily Memory = 15000000 * 48 = 686.64 Mb
-
     

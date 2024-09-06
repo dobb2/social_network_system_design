@@ -1,3 +1,14 @@
+// Replication:
+// - master-slave (async)
+// - replication factor 2
+// With a small rps per record the replication lag will be low,
+// so there is no requirement and no need for strong consistency.
+// in this case the data will be given to a user from another service that has prepared posts
+//
+// Sharding:
+// - key based by id and author_id
+
+
 Table posts {
   id string [primary key]
   author_id string [not null, note: 'author id of the post']
@@ -9,14 +20,3 @@ Table posts {
   media "varchar(255)[3]" [note: 'image urls']
 }
 
-
-Table comments {
-  id string [primary key]
-  post_id string [not null, note: '']
-  author_id string [not null, note: 'author id of the comment']
-  comment varchar(500) [not null]
-  created_at timestamp [not null]
-}
-
-
-Ref : comments.post_id > posts.id
