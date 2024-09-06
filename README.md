@@ -128,8 +128,8 @@ Disk evaluation for media in db:
 
 Host evaluation for post:
 
-    Hosts = 2 / 2 = 2
-    Hosts_with_replication_2 = 2 * 2 = 2
+    Hosts = 2 / 2 = 1
+    Hosts_with_replication_2 = 2 * 1 = 2
 
 * Since traffic and rps are not large for post service, it makes sense to put the entire master base in one host.
   An excessive number of hosts will make it harder for us to interact with them,
