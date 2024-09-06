@@ -128,13 +128,20 @@ Disk evaluation for media in db:
 
 Host evaluation for post:
 
-    Hosts = 2 / 1 = 1
-    Hosts_with_replication_2 = 2 * 2 = 4
+    Hosts = 2 / 2 = 2
+    Hosts_with_replication_2 = 2 * 2 = 2
+
+* Since traffic and rps are not large for post service, it makes sense to put the entire master base in one host.
+  An excessive number of hosts will make it harder for us to interact with them,
+  and there is no need for load balancing yet
 
 Host evaluation for media:
 
-    Hosts = 32 / 1 = 32
-    Hosts_with_replication_2 = 32 * 3 = 64
+    Hosts = 32 / 4 = 8
+    Hosts_with_replication_2 = 8 * 3 = 24
+
+* Given that the bandwidth is about 1gb/s, we need 5.5gb of traffic from 6 hosts. 
+* Given 32 memory disks, we need a minimum of 8 hosts, then there will be 4 disks per host
 
 ### subsystem Comment
 
@@ -188,8 +195,12 @@ Disk evaluation for comment in db:
 
 Host evaluation for comment:
 
-    Hosts = 3 / 1 = 3
-    Hosts_with_replication_2 = 3 * 2 = 6
+    Hosts = 3 / 3 = 1
+    Hosts_with_replication_2 = 1 * 2 = 2
+
+* Since traffic and rps are not large, it makes sense to put the entire master base in one host.
+    An excessive number of hosts will make it harder for us to interact with them, 
+    and there is no need for load balancing yet
     
 
 Required memory for posts with comments in cache:

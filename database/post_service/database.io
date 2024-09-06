@@ -1,7 +1,10 @@
 // Replication:
-// - master-slave (sync)
+// - master-slave (async)
 // - replication factor 2
-// sync, because have 35 rps to write
+// With a small rps per record the replication lag will be low,
+// so there is no requirement and no need for strong consistency.
+// in this case the data will be given to a user from another service that has prepared posts
+//
 // Sharding:
 // - key based by id and author_id
 

@@ -1,7 +1,9 @@
 // Replication:
-// - master-slave (sync) and Warm Standby
+// - master-slave (async) and Warm Standby
 // - replication factor 2
-//
+// With a small rps per record the replication lag will be low,
+// so there is no requirement and no need for strong consistency.
+// in this case the data will be given to a user from another service that has prepared rates
 // Sharding:
 // - No need for 1 year estimation loads, but virtual sharding split by post_id
 

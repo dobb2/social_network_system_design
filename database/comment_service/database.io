@@ -1,6 +1,9 @@
 // Replication:
-// - master-slave (sync)
+// - master-slave (async)
 // - replication factor 2
+// With a small rps per record the replication lag will be low,
+// so there is no requirement and no need for strong consistency.
+// in this case the data will be given to a user from another service that has prepared comments in post
 //
 // Sharding:
 // - key based by post_id
