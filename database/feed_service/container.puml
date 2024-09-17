@@ -1,0 +1,47 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(client, "Client")
+Container(apiGateway, "api gateway", "Go", "gateway, load balancer")
+
+Container(postSystem, "Post System", "Software system", "store posts")
+ContainerQueue(postMessageQueue, "Post events queue", "Kafka", "Message queue for events by post comments")
+
+Container(commentSystem, "Comment System", "Software system", "store comments for posts")
+ContainerQueue(commentMessageQueue, "Comment Events queue", "Kafka", "Message queue for events by post comments")
+
+
+
+Container(userSystem, "User System", "Software system", "store followers and users")
+ContainerQueue(userMessageQueue, "User events queue", "Kafka", "Message queue for events by user follows")
+
+Container(rateSystem, "Rate System", "Software system", "store rates and avg rate for posts")
+ContainerQueue(rateMessageQueue, "Rate events queue", "Kafka", "Message queue for post rates events")
+
+
+System_Boundary(feedSystem, "Feed system") {
+    Container(feedService, "Feed Service", "Go", "Handling creation rates for posts", $tags="webApp")
+    ContainerDb(feedCache, "Feed cache", "Redis", "Store to 20 last posts and feed of each user from DAU",  $tags="db")
+}
+
+Rel(client, apiGateway, "Create rate for posts", "REST")
+Rel(apiGateway, feedService, "Get feed posts or user posts", "gRPC")
+
+Rel(postSystem, postMessageQueue, "Publishes of post creation events")
+Rel(feedSystem, postMessageQueue, "Subscribes to post creation events")
+Rel(feedSystem, postSystem, "Get posts", "gRPC")
+
+Rel(commentSystem, commentMessageQueue, "Publishes of comment creation events")
+Rel(feedService, commentMessageQueue, "Subscribes to comment creation events")
+Rel(feedService, commentSystem, "Get post comments", "gRPC")
+
+Rel(userSystem, userMessageQueue, "Publishes of user follows events")
+Rel(feedService, userMessageQueue, "Subscribes to user follows events")
+Rel(feedService, userSystem, "Get follows for user", "gRPC")
+
+Rel(rateSystem, rateMessageQueue, "Publishes of rate post events")
+Rel(feedService, rateMessageQueue, "Subscribes to rate post events")
+Rel(feedService, rateSystem, "Get avg rate for posts", "gRPC")
+
+Rel(feedService, feedCache, "Get feed/user posts and put new posts on feed or user posts")
+@enduml

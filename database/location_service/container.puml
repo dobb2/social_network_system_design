@@ -1,0 +1,32 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(client, "Client")
+Container(apiGateway, "api gateway", "Go", "gateway, load balancer")
+
+Container(postSystem, "Post System", "Software system", "store posts")
+
+Container(rateSystem, "Rate System", "Software system", "store rates and avg rate for posts")
+ContainerQueue(rateMessageQueue, "Rate events queue", "Kafka", "Message queue for post rates events")
+
+
+System_Boundary(locationSystem, "Location system") {
+    Container(locationService, "Location Service", "Go", "Handling for get popular locations and posts", $tags="webApp")
+    ContainerDb(locationDatabase, "Location database", "Clickhouse", "Store daily rates",  $tags="db")
+    ContainerDb(locationCache, "Location cache", "Redis", "Store popular locations with posts",  $tags="db")
+}
+
+Rel(client, apiGateway, "Create rate for posts", "REST")
+Rel(apiGateway, locationService, "Get feed posts or user posts", "gRPC")
+
+Rel(locationService, postSystem, "Get posts for daily popular locations", "gRPC")
+
+Rel(rateSystem, rateMessageQueue, "Publishes of rate post events")
+Rel(locationService, rateMessageQueue, "Subscribes to rate post events")
+Rel(locationService, rateSystem, "Get rates for posts", "gRPC")
+
+
+
+Rel(locationService, locationCache, "Get/update posts from popular location")
+Rel(locationService, locationDatabase, "Add rate and read for calc daily rates")
+@enduml

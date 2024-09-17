@@ -1,0 +1,21 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(client, "Client")
+Container(apiGateway, "api gateway", "Go", "gateway, load balancer")
+Container(feedSystem, "Feed system", "Software system", "store feed posts and friends posts for active users")
+ContainerQueue(commentMessageQueue, "Comment events queue", "Kafka", "Message queue for events by post comments")
+
+System_Boundary(commentSystem, "Comment system") {
+    Container(commentService, "Comment Service", "Go", "Handling creation of comments to posts", $tags="webApp")
+    ContainerDb(commentDatabase, "Comment database", "PgSQL", "Stores post comments",  $tags="db")
+}
+
+Rel(client, apiGateway, "Creates post comments", "REST")
+Rel(apiGateway, commentService, "Creates post comments", "gRPC")
+
+Rel(commentService, commentDatabase, "Creates post comment and gets comments per post")
+Rel(commentService, commentMessageQueue, "Publishes of comment creation events")
+Rel(feedSystem, commentMessageQueue, "Subscribes to comment creation events")
+Rel(feedSystem, commentService, "Get post comments", "gRPC")
+@enduml

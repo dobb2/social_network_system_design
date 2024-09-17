@@ -1,0 +1,23 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(client, "Client")
+Container(apiGateway, "api gateway", "Go", "gateway, load balancer")
+Container(feedSystem, "Feed system", "Software system", "store feed posts and friends posts for active users")
+ContainerQueue(userMessageQueue, "User events queue", "Kafka", "Message queue for events by user follows")
+
+System_Boundary(userSystem, "User system") {
+    Container(userService, "User Service", "Go", "Handling creation follows for users", $tags="webApp")
+    ContainerDb(userDatabase, "User database", "PgSQL", "Stores user and user follows",  $tags="db")
+}
+
+Rel(client, apiGateway, "Creates post comments", "REST")
+Rel(apiGateway, userService, "Create post", "gRPC")
+
+
+Rel(userService, userDatabase, "Create/Delete follows for user")
+
+Rel(userService, userMessageQueue, "Publishes of user follows events")
+Rel(feedSystem, userMessageQueue, "Subscribes to user follows events")
+Rel(feedSystem, userService, "Get follows for user", "gRPC")
+@enduml

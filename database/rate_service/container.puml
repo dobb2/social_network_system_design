@@ -1,0 +1,28 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(client, "Client")
+Container(apiGateway, "api gateway", "Go", "gateway, load balancer")
+Container(feedSystem, "Feed system", "Software system", "store feed posts and friends posts for active users")
+Container(locationSystem, "Location System", "Software system", "calc and store popular locations and post from this locations")
+ContainerQueue(rateMessageQueue, "Rate events queue", "Kafka", "Message queue for post rates events")
+
+System_Boundary(rateSystem, "Rate system") {
+    Container(rateService, "Rate Service", "Go", "Handling creation rates for posts", $tags="webApp")
+    ContainerDb(rateDatabase, "Rate database", "PgSQL", "Stores post rates",  $tags="db")
+    ContainerDb(rateCache, "Rate cache", "Redis", "Stores avg rate for posts",  $tags="db")
+}
+
+Rel(client, apiGateway, "Create rate for posts", "REST")
+Rel(apiGateway, rateService, "Create post", "gRPC")
+
+
+Rel(rateService, rateDatabase, "Create rates for post")
+Rel(rateService, rateCache, "Add rate value for avg rate for post")
+
+Rel(rateService, rateMessageQueue, "Publishes of rate post events")
+Rel(feedSystem, rateMessageQueue, "Subscribes to rate post events")
+Rel(feedSystem, rateService, "Get avg rate for posts", "gRPC")
+Rel(locationSystem, rateMessageQueue, "Subscribes to rate post events")
+Rel(locationSystem, rateService, "Get rates for posts", "gRPC")
+@enduml
