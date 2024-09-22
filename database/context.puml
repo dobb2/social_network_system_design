@@ -1,0 +1,27 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(client, "Client")
+Container(postSystem, "Post System", "Software system", "store posts")
+Container(commentSystem, "Comment System", "Software system", "store comments for posts")
+Container(userSystem, "User System", "Software system", "store followers and users")
+Container(locationSystem, "Location System", "Software system", "calc and store popular locations and post from this locations")
+Container(rateSystem, "Rate System", "Software system", "store rates and avg rate for posts")
+Container(feedSystem, "Feed System", "Software system", "store feed posts and friends posts for active users")
+
+
+Rel(client, postSystem, "Creates posts")
+Rel(client, commentSystem, "Creates comment for posts")
+Rel(client, userSystem, "Create user and follow/unfollow another users")
+Rel(client, rateSystem, "Create/Get rates post")
+Rel(client, feedSystem, "Gets user feed and posts")
+Rel(feedSystem, postSystem, "Get posts")
+Rel(feedSystem, userSystem, "Get followers for user")
+Rel(feedSystem, commentSystem, "Get comments for post in feed an")
+Rel(feedSystem, rateSystem, "get avg rate for post")
+
+Rel(client, locationSystem, "Get popular locations with posts")
+Rel(locationSystem, postSystem, "Get posts per location")
+Rel(locationSystem, rateSystem, "Get rates per location in posts")
+
+@enduml
