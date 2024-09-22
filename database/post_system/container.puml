@@ -5,7 +5,7 @@ Person(client, "Client")
 Container(apiGateway, "api gateway", "Go", "gateway, load balancer")
 Container(feedSystem, "Feed system", "Software system", "store feed posts and friends posts for active users")
 Container(locationSystem, "Location system", "Software system", "calc and store popular locations and post from this locations")
-ContainerQueue(postMessageQueue, "Post events queue", "Kafka", "Message queue for events by post comments")
+ContainerQueue(postMessageQueue, "Post events queue", "Kafka", "Message queue for events by post")
 
 System_Boundary(postSystem, "Post system") {
     Container(mediaService, "Media Service", "Go", "Handling creation of media for posts", $tags="webApp")

@@ -5,10 +5,10 @@ Person(client, "Client")
 Container(apiGateway, "api gateway", "Go", "gateway, load balancer")
 
 Container(postSystem, "Post System", "Software system", "store posts")
-ContainerQueue(postMessageQueue, "Post events queue", "Kafka", "Message queue for events by post comments")
+ContainerQueue(postMessageQueue, "Post events queue", "Kafka", "Message queue for events by post")
 
 Container(commentSystem, "Comment System", "Software system", "store comments for posts")
-ContainerQueue(commentMessageQueue, "Comment Events queue", "Kafka", "Message queue for events by post comments")
+ContainerQueue(commentMessageQueue, "Comment Events queue", "Kafka", "Message queue for events by post")
 
 
 
