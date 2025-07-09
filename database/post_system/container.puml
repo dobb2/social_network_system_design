@@ -1,0 +1,34 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(client, "Client")
+Container(apiGateway, "api gateway", "Go", "gateway, load balancer")
+Container(feedSystem, "Feed system", "Software system", "store feed posts and friends posts for active users")
+Container(locationSystem, "Location system", "Software system", "calc and store popular locations and post from this locations")
+ContainerQueue(postMessageQueue, "Post events queue", "Kafka", "Message queue for events by post")
+
+System_Boundary(postSystem, "Post system") {
+    Container(mediaService, "Media Service", "Go", "Handling creation of media for posts", $tags="webApp")
+    ContainerDb(mediaDatabase, "Media database", "CEPH", "Store media",  $tags="db")
+    Container(mediaInfraService, "MediaInfra Service", "Go", "migrating data to permanent storage and cleaning up temporary storage", $tags="webApp")
+    ContainerQueue(messageMediaQueue, "Events queue", "Kafka", "Message queue for events by post media")
+    Container(postService, "Post Service", "Go", "Handling creation of posts", $tags="webApp")
+    ContainerDb(postDatabase, "Post database", "PgSQL", "Stores post comments",  $tags="db")
+}
+
+Rel(client, apiGateway, "Creates post comments", "REST")
+Rel(apiGateway, postService, "Create post", "gRPC")
+Rel(apiGateway, mediaService, "Create media", "gRPC")
+
+Rel(mediaService, mediaDatabase, "Create and gets media")
+Rel(mediaInfraService, mediaDatabase, "Update permament and temporary media")
+
+Rel(postService, postDatabase, "Create and get posts")
+Rel(postService, messageMediaQueue, "Publishing media created posts")
+Rel(mediaInfraService, messageMediaQueue, "Subscribes to created post media")
+
+Rel(postService, postMessageQueue, "Publishes of post creation events")
+Rel(feedSystem, postMessageQueue, "Subscribes to post creation events")
+Rel(feedSystem, postService, "Get posts", "gRPC")
+Rel(locationSystem, postService, "Get posts", "gRPC")
+@enduml
